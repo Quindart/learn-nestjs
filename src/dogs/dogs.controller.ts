@@ -1,16 +1,20 @@
-import { Body, Controller, Get, HttpCode, HttpStatus, Param, Post, Query, Req, Res } from '@nestjs/common';
+import { Body, Controller, ForbiddenException, Get, HttpCode, HttpStatus, Param, ParseIntPipe, Post, Query, Req, Res, UseFilters, UseGuards } from '@nestjs/common';
 import { DogDto } from './dto/create-dog.dto';
 import { Observable, of } from 'rxjs';
 import { Response } from 'express';
 import { DogsService } from './dogs.service';
+import { AuthGuard } from 'src/guards/auth/auth.guard';
+import { ValidationPipe } from 'src/validation.pipe';
 //! -> Demo
 @Controller('dogs')
 export class DogsController {
     constructor(private dogSv: DogsService) { }
     @Get()
+    @UseGuards(AuthGuard)
     findAll(): string {
         return 'getAll'
     }
+
     //TODO: by query
     @Get('filter')
     filter(@Query('key') key: string, @Query('field') field: string): string {
@@ -25,8 +29,13 @@ export class DogsController {
     //TODO : create
     @Post()
     @HttpCode(201)
-    create(@Body() createDog: DogDto): string {
+    // @UseFilters(new HttpExceptionFilter())
+    create(@Body(new ValidationPipe()) createDog: DogDto): string {
+        // try {
         return `dog created success, dog info: ${createDog.age} -- ${createDog.color} -- ${createDog.name}`
+        // } catch (error) {
+        //     throw new ForbiddenException();
+        // }
     }
 
     //TODO Observable use for query database

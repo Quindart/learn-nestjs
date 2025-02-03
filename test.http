@@ -4,13 +4,26 @@
 
 # GET http://localhost:3000/dogs/filter?key=quang&&field=full_name
 
+
+POST http://localhost:3000/dogs
+Content-Type: application/json
+
+{   
+    "name": "alska",
+    "color": "white",
+    "age": "2"
+}
+
 # POST http://localhost:3000/dogs
 # Content-Type: application/json
+
 # {
 #     "name": "abc",
-#     "color":"white",
-#     "age": 15
+#     "color": "white",
 # }
+
+
+
 
 # Test dynamic module
 # GET http://localhost:3000/config
