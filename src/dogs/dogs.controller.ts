@@ -5,16 +5,17 @@ import { Response } from 'express';
 import { DogsService } from './dogs.service';
 import { AuthGuard } from 'src/guards/auth/auth.guard';
 import { ValidationPipe } from 'src/validation.pipe';
+import { Version } from './interfaces/dog.interface';
 //! -> Demo
+@Version('1.0-quindarts')
 @Controller('dogs')
+@UseGuards(AuthGuard)
 export class DogsController {
     constructor(private dogSv: DogsService) { }
     @Get()
-    @UseGuards(AuthGuard)
     findAll(): string {
         return 'getAll'
     }
-
     //TODO: by query
     @Get('filter')
     filter(@Query('key') key: string, @Query('field') field: string): string {
@@ -61,7 +62,6 @@ export class DogsController {
             data: [3, 3, 3]
         }
     }
-
     //TODO Use provider
     @Post('list')
     addList(@Body() addList: { name: string }) {
